@@ -31,7 +31,7 @@
     "noEmit": true
   },
   "include": [
-    "src/*",
+    "src/**/*.ts{,x}",
     "custom.d.ts"
   ],
   "exclude": [
@@ -45,6 +45,7 @@
     "cypress/integration/examples"
   ],
   "types": [
-    "typePatches"
+    "typePatches",
+    "cypress"
   ]
 }
