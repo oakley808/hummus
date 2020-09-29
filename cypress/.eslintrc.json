@@ -1,0 +1,10 @@
+{
+  "extends": [
+    "plugin:cypress/recommended",
+    "plugin:chai-friendly/recommended"
+  ],
+  "globals": {
+    "cy": true
+  }
+}
+
