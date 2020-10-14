@@ -1,8 +1,73 @@
 version: 2.1
+
 orbs:
   cypress: cypress-io/cypress@1
+
+executors:
+  node:
+    docker:
+      - image: circleci/node
+
+commands:
+  setup:
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - yarn-packages-v3-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-packages-v3-{{ .Branch }}-
+            - yarn-packages-v3-
+      - run: echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > .npmrc
+      - run: yarn install --immutable --cache-folder ~/.cache/yarn
+  cleanup:
+    steps:
+      - save_cache:
+          paths:
+            - ~/.cache/yarn
+          key: yarn-packages-v3-{{ .Branch }}-{{ checksum "yarn.lock" }}
+
+jobs:
+  test:
+    executor: node
+    steps:
+      - setup
+      - run: yarn lint
+      - run: yarn test
+      - cleanup
+  e2e:
+    executor: node
+    steps:
+      - setup
+      - run: yarn lint
+      - run: yarn test
+      # - run: wait for branch to be live on Vercel
+      # - run: run e2e test suite
+      - cleanup
+
 workflows:
-  build:
+  pr:
     jobs:
-      - cypress/run:
-          install-command: yarn install --frozen-lockfile
+      - test:
+          filters:
+            branches:
+              ignore:
+                - master
+                - develop
+                - /release\/.*/
+                - /hotfix\/.*/
+      - cypress/run: # "run" job comes from the cypress orb
+          filters:
+            branches:
+              only:
+                - feature/cypress-circle-integration
+
+  release:
+    jobs:
+      - e2e:
+          filters:
+            branches:
+              only:
+                - master
+                - develop
+                - /release\/.*/
+                - /hotfix\/.*/
