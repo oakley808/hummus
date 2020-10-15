@@ -40,24 +40,25 @@ jobs:
       - setup
       - run: yarn lint
       - run: yarn test
-      # - run: wait for branch to be live on Vercel
-      # - run: run e2e test suite
       - cleanup
 
 workflows:
   pr:
     jobs:
-      - test:
-          filters:
-            branches:
-              ignore:
-                - master
-                - develop
-                - /release\/.*/
-                - /hotfix\/.*/
-      - cypress/run: # "run" job comes from the cypress orb
+      - cypress/install:
           pre-steps:
-            - run: setup
+            - checkout
+            - restore_cache:
+                keys:
+                  - yarn-packages-v3-{{ .Branch }}-{{ checksum "yarn.lock" }}
+                  - yarn-packages-v3-{{ .Branch }}-
+                  - yarn-packages-v3-
+            - run: echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > .npmrc
+          install-command: yarn install --immutable --cache-folder ~/.cache/yarn
+      - cypress/run:
+          install-command: 'yarn install --immutable --cache-folder ~/.cache/yarn'
+          requires:
+            - cypress/install
           filters:
             branches:
               only:
