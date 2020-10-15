@@ -56,7 +56,8 @@ workflows:
                 - /release\/.*/
                 - /hotfix\/.*/
       - cypress/run: # "run" job comes from the cypress orb
-          install-command: yarn install --frozen-lockfile
+          pre-steps:
+            - run: setup
           filters:
             branches:
               only:
