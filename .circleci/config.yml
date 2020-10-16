@@ -60,7 +60,7 @@ workflows:
           requires:
             - cypress/install
           start: npm start
-          wait-on: 'http://localhost:3000'
+          wait-on: 'http-get://localhost:3000'
           filters:
             branches:
               only:
