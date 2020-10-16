@@ -1,1 +1,11 @@
-{}
+{
+  "baseUrl": "http://localhost:3000",
+  "viewportWidth": 1200,
+  "viewportHeight": 900,
+  "env": {
+    "host": "ec2-34-205-102-137.compute-1.amazonaws.com",
+    "database": "d3ctu5nkmsrphc",
+    "port": 5432,
+    "ssl": true
+  }
+}

@@ -56,7 +56,9 @@
     "eslint-plugin-chai-friendly": "^0.6.0",
     "eslint-plugin-cypress": "^2.11.2",
     "husky": "^4.3.0",
-    "lint-staged": "^10.4.0"
+    "lint-staged": "^10.4.0",
+    "pg-promise": "^10.6.2",
+    "execa": "^4.0.3"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
