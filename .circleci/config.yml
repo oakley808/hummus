@@ -59,6 +59,7 @@ workflows:
           install-command: 'yarn install --immutable --cache-folder ~/.cache/yarn'
           requires:
             - cypress/install
+          start: npm start
           filters:
             branches:
               only:
