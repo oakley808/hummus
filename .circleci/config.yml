@@ -82,7 +82,7 @@ workflows:
 
   release:
     jobs:
-      - e2e:
+      - smoke-test:
           filters:
             branches:
               only:
