@@ -42,13 +42,16 @@ jobs:
           at: ~/automate-node-samples
       - add_ssh_keys:
           fingerprints:
-            - "f3:19:f4:43:9d:d7:d5:c7:8d:12:03:b9:bc:9d:36:24"
+            # user key
+            - "04:43:3a:87:7a:5a:95:80:77:4c:1d:67:1f:6c:e9:56"
+            # deploy key
+            # - "f3:19:f4:43:9d:d7:d5:c7:8d:12:03:b9:bc:9d:36:24"
       - run:
           name: Clone Testing Repository
           command: |
             GIT_SSH_COMMAND='ssh -v -i ~/.ssh/id_rsa_fingerprint'
             git clone git@github.com:oakley808/automate-node-samples.git ~/automate-node-samples
-            cd automate-node-samples
+            cd ~/automate-node-samples
             yarn
             yarn test
             echo 'w00t!'
