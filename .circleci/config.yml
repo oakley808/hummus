@@ -37,34 +37,44 @@ jobs:
   e2e:
     executor: node
     steps:
-      - setup
-      - run: yarn lint
-      - run: yarn test
-      - cleanup
+      - checkout
+      - attach_workspace:
+          at: ~/automate-node-samples
+      - add_ssh_keys:
+          fingerprints:
+            - "f3:19:f4:43:9d:d7:d5:c7:8d:12:03:b9:bc:9d:36:24"
+      - run:
+          name: Clone Testing Repository
+          command: >-
+            GIT_SSH_COMMAND='ssh -v -i ~/.ssh/id_rsa_fingerprint'
+            git clone git@github.com:oakley808/automate-node-samples.git ~/automate-node-samples
+
 
 workflows:
   pr:
     jobs:
-      - cypress/install:
-          pre-steps:
-            - checkout
-            - restore_cache:
-                keys:
-                  - yarn-packages-v3-{{ .Branch }}-{{ checksum "yarn.lock" }}
-                  - yarn-packages-v3-{{ .Branch }}-
-                  - yarn-packages-v3-
-            - run: echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > .npmrc
-          install-command: yarn install --immutable --cache-folder ~/.cache/yarn
-      - cypress/run:
-          install-command: 'yarn install --immutable --cache-folder ~/.cache/yarn'
-          requires:
-            - cypress/install
-          start: npm start
-          wait-on: 'http-get://localhost:3000'
-          filters:
-            branches:
-              only:
-                - feature/cypress-circle-integration
+      - e2e
+
+      # - cypress/install:
+      #     pre-steps:
+      #       - checkout
+      #       - restore_cache:
+      #           keys:
+      #             - yarn-packages-v3-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      #             - yarn-packages-v3-{{ .Branch }}-
+      #             - yarn-packages-v3-
+      #       - run: echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > .npmrc
+      #     install-command: yarn install --immutable --cache-folder ~/.cache/yarn
+      # - cypress/run:
+      #     install-command: 'yarn install --immutable --cache-folder ~/.cache/yarn'
+      #     requires:
+      #       - cypress/install
+      #     start: npm start
+      #     wait-on: 'http-get://localhost:3000'
+      #     filters:
+      #       branches:
+      #         only:
+      #           - feature/cypress-circle-integration
 
   release:
     jobs:
