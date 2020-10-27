@@ -47,7 +47,6 @@ jobs:
           name: Clone Testing Repository
           command: |
             GIT_SSH_COMMAND='ssh -v -i ~/.ssh/id_rsa_fingerprint'
-            cat ~/.ssh/id_rsa_fingerprint
             git clone git@github.com:oakley808/automate-node-samples.git ~/automate-node-samples
             cd automate-node-samples
             yarn
