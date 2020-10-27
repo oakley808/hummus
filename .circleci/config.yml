@@ -34,7 +34,7 @@ jobs:
       - run: yarn lint
       - run: yarn test
       - cleanup
-  e2e:
+  smoke-test:
     executor: node
     steps:
       - checkout
@@ -44,8 +44,6 @@ jobs:
           fingerprints:
             # user key
             - "04:43:3a:87:7a:5a:95:80:77:4c:1d:67:1f:6c:e9:56"
-            # deploy key
-            # - "f3:19:f4:43:9d:d7:d5:c7:8d:12:03:b9:bc:9d:36:24"
       - run:
           name: Clone Testing Repository
           command: |
@@ -59,7 +57,7 @@ jobs:
 workflows:
   pr:
     jobs:
-      - e2e
+      - smoke-test
 
       # - cypress/install:
       #     pre-steps:
